@@ -20,9 +20,10 @@ When this process is finished, you can search your data in the AWS Elasticsearch
 
 1. Amazon Web Services (AWS) account with DynamoDB
 2. A running Elasticsearch cluster—To download Elasticsearch, go to https://www.elastic.co/products/elasticsearch. Or Spin up your own AWS Elasticsearch cluster at http://console.aws.amazon.com/es
-3. You may need to install development tools for GCC
-```sudo yum groupinstall "Development Tools" ``` 
-4. JRuby—To download JRuby, you may install this with RVM : https://rvm.io/rvm/install
+3. You may need to install development tools for GCC ```sudo yum groupinstall "Development Tools" ```
+4. Download all the pre-requisites. 
+
+ a. JRuby—To download JRuby, you may install this with RVM : https://rvm.io/rvm/install . 
 ```
 gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
 \curl -sSL https://get.rvm.io | bash -s stable --ruby
@@ -32,21 +33,22 @@ exec bash
 rvm install jruby-9.0.1.0
 rvm --default use jruby-9.0.1.0
 ```
-5. Logstash—To download. You may clone logstash at https://github.com/awslabs/logstash-input-dynamodb, however this is minimalistic. Instead you may also download a stable logstash release from elastic.co with some added plugins for future use. https://www.elastic.co/downloads/logstash
+ b. Logstash—To download. You may clone logstash at https://github.com/awslabs/logstash-input-dynamodb, however this is minimalistic. Instead you may also download a stable logstash release from elastic.co with some added plugins for future use. https://www.elastic.co/downloads/logstash 
 ```
 wget https://download.elastic.co/logstash/logstash/logstash-1.5.4.zip 
 unzip logstash-1.5.4.zip
 ```
-6. Git—To download Git, go to http://git-scm.com/downloads
-```sudo yum install git```
-7. Apache Maven—To get Apache Maven, go to http://maven.apache.org/.
-```
+ c. Git—To download Git, go to http://git-scm.com/downloads. ```sudo yum install git```
+
+ d. Apache Maven—To get Apache Maven, go to http://maven.apache.org/. 
+ ```
 # Install maven
- sudo yum install -y apache-maven
+sudo yum install -y apache-maven
  sudo wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo
  sudo sed -i s/\$releasever/6/g /etc/yum.repos.d/epel-apache-maven.repo
- sudo yum install -y apache-maven
-```
+ sudo yum install -y apache-maven 
+ ```
+
 ### Before You Begin: Create a Source Table
 
 In this step, you will create a DynamoDB table with DynamoDB Streams enabled. This will be the source table and writes to this table will be processed by the Logstash plugin for DynamoDB.
