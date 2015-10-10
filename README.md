@@ -29,10 +29,11 @@ When this process is finished, you can search your data in the AWS Elasticsearch
 ```
 gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
 \curl -sSL https://get.rvm.io | bash -s stable --ruby
-# add the following line to '/home/ec2-user/.bash_profile':                                                                  source ~/.profile  
+# add the following line to '/home/ec2-user/.bash_profile': source ~/.profile  
 exec bash
 # Install and use ruby inside JRuby instead of system provided ruby
 rvm install jruby-9.0.1.0
+/bin/bash --login
 rvm --default use jruby-9.0.1.0
 ```
  b. Logstash—To download. You may clone logstash at https://github.com/awslabs/logstash-input-dynamodb, however this is minimalistic. Instead you may also download a stable logstash release from elastic.co with some added plugins for future use. https://www.elastic.co/downloads/logstash 
@@ -45,11 +46,14 @@ unzip logstash-1.5.4.zip
  d. Apache Maven—To get Apache Maven, go to http://maven.apache.org/. 
  ```
 # Install maven
-sudo yum install -y apache-maven
  sudo wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo
  sudo sed -i s/\$releasever/6/g /etc/yum.repos.d/epel-apache-maven.repo
  sudo yum install -y apache-maven 
  ```
+ e. Install JAVA 8 because Logstash support for Java 7 is on best efforts.  
+Update java from a sample script here: https://github.com/mannem/Scripts/blob/master/java8UpdateScript.sh
+
+```\curl https://raw.githubusercontent.com/mannem/Scripts/master/java8UpdateScript.sh | bash```  
 
 ### Before You Begin: Create a Source Table
 
