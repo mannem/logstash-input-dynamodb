@@ -7,24 +7,50 @@ Logstash is a data pipeline service that processes data, parses data, and then o
 ## The following sections walk you through the process to:
 
 1. Create a DynamoDB table and enable a new stream on the table.
-2. Download, build, and install the Logstash plugin for DynamoDB.
-3. Configure Logstash to output to Elasticsearch and the command line.
+2. Download, build, and install the Logstash plugin for DynamoDB on Amazon Linux Ec2 Instance.
+3. Configure Logstash to output to AWS Elasticsearch endpoint and the command line.
 4. Run the Logstash plugin for DynamoDB.
 5. Test Logstash by adding DynamoDB items to the table.
 
-When this process is finished, you can search your data in the Elasticsearch cluster.
+When this process is finished, you can search your data in the AWS Elasticsearch cluster using Kibana.
 
 ### Prerequisites
 
 **The following items are required to use the Logstash plugin for Amazon DynamoDB:**
 
 1. Amazon Web Services (AWS) account with DynamoDB
-2. A running Elasticsearch cluster—To download Elasticsearch, go to https://www.elastic.co/products/elasticsearch.
-3. Logstash—To download Logstash, go to https://github.com/awslabs/logstash-input-dynamodb.
-4. JRuby—To download JRuby, go to http://jruby.org/download.
-5. Git—To download Git, go to http://git-scm.com/downloads
-6. Apache Maven—To get Apache Maven, go to http://maven.apache.org/.
-
+2. A running Elasticsearch cluster—To download Elasticsearch, go to https://www.elastic.co/products/elasticsearch. Or Spin up your own AWS Elasticsearch cluster at http://console.aws.amazon.com/es
+3. You may need to install development tools for GCC.
+```
+sudo yum groupinstall "Development Tools" 
+``` 
+4. JRuby—To download JRuby, you may install this with RVM : https://rvm.io/rvm/install
+```
+gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+\curl -sSL https://get.rvm.io | bash -s stable --ruby
+# add the following line to '/home/ec2-user/.bash_profile':                                                                  source ~/.profile  
+exec bash
+# Install and use ruby inside JRuby instead of system provided ruby
+rvm install jruby-9.0.1.0
+rvm --default use jruby-9.0.1.0
+```
+5. Logstash—To download. You may clone logstash at https://github.com/awslabs/logstash-input-dynamodb, however this is minimalistic. Instead you may also download a stable logstash release from elastic.co with some added plugins for future use. https://www.elastic.co/downloads/logstash
+```
+wget https://download.elastic.co/logstash/logstash/logstash-1.5.4.zip
+unzip logstash-1.5.4.zip
+```
+6. Git—To download Git, go to http://git-scm.com/downloads
+```
+sudo yum install git
+```
+7. Apache Maven—To get Apache Maven, go to http://maven.apache.org/.
+```
+# Install maven
+ sudo yum install -y apache-maven
+ sudo wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo
+ sudo sed -i s/\$releasever/6/g /etc/yum.repos.d/epel-apache-maven.repo
+ sudo yum install -y apache-maven
+```
 ### Before You Begin: Create a Source Table
 
 In this step, you will create a DynamoDB table with DynamoDB Streams enabled. This will be the source table and writes to this table will be processed by the Logstash plugin for DynamoDB.
@@ -59,38 +85,36 @@ To use the Logstash plugin for DynamoDB, you need to build, install, run the plu
 
 At the command prompt, change to the directory where you want to install the Logstash plugin for DynamoDB and demo project.
 
-In the directory where you want the Git project, clone the Git project:
+In the directory where you want the Git project, clone the (Updated) Git project:
 
 ```
-git clone https://github.com/awslabs/logstash-input-dynamodb.git
+git clone https://github.com/mannem/logstash-input-dynamodb.git
 ```
 
 **Install the Bundler gem by typing the following:**
 
 ```
-jruby -S gem install bundler
+gem install bundler
 ```
-
-**NOTE: The ```jruby -S``` syntax ensures that our gem is installed with ```jruby``` and not ```ruby```**
 
 The Bundler gem checks dependencies for Ruby gems and installs them for you.
 
-To install the dependencies for the Logstash plugin for DynamoDB, type the following command:
+To install the dependencies for the Logstash plugin for DynamoDB, type the following command (Inside the logstash directory):
 
 ```
-jruby -S bundle install
+bundle install
 ```
 
 To build the gem, type the following command:
 
 ```
-jruby -S gem build logstash-input-dynamodb.gemspec
+gem build logstash-input-dynamodb.gemspec
 ```
 
 To install the gem, in the logstash-dynamodb-input folder type:
 
 ```
-jruby -S gem install --local logstash-input-dynamodb-1.0.0-java.gem
+gem install --local logstash-input-dynamodb-1.0.0-java.gem
 ```
 
 ### To install the Logstash plugin for DynamoDB
@@ -121,38 +145,37 @@ If the logstash-output-elasticsearch or logstash-output-stdout plugins are not l
 
 ### Running the Logstash Plugin for Amazon DynamoDB
 
-**NOTE: First, make sure you have *Enabled Streams* (see above) for your DynamoDB table(s) before running logstash.  Logstash for DynamoDB requires that each table you are logging from have a streams enabled to work.**
+**NOTE: First, make sure you have *Enabled Streams* (see above) for your DynamoDB table(s) before running logstash. The streams should also have required view type (like new_and_old_images) that is specified in configuration.  Logstash for DynamoDB requires that each table you are logging from have a streams enabled to work.**
 
-In the local Logstash directory create a ```logstash-dynamodb.conf``` file with the following contents:
+In the local Logstash directory type the following command:
 
 ```
-input { 
-    dynamodb{
-      endpoint => "dynamodb.us-east-1.amazonaws.com" 
-      streams_endpoint => "streams.dynamodb.us-east-1.amazonaws.com" 
-      view_type => "new_and_old_images" 
-      aws_access_key_id => "<access_key_id>" 
-      aws_secret_access_key => "<secret_key>" 
-      table_name => "SourceTable"
-  }
-} 
+bin/logstash -e 'input { 
+    dynamodb{endpoint => "dynamodb.us-west-2.amazonaws.com" 
+    streams_endpoint => "streams.dynamodb.us-west-2.amazonaws.com" 
+    view_type => "new_and_old_images" 
+    aws_access_key_id => "<access_key_id>" 
+    aws_secret_access_key => "<secret_key>" 
+    table_name => "DynamoDBTableName"} } 
 output { 
-    elasticsearch {
-      host => localhost 
-    } 
-    stdout { } 
-}
+    elasticsearch 
+        { host => "search-imdb-pgjs6t52gf3m2c5xkxpragmaer.us-west-2.es.amazonaws.com" port => "443" protocol => "http" ssl => "true"} 
+        stdout { } }'
 ```
 
 **Important**
 
-This is an example configuration. You must replace ```<access_key_id>``` and ```<secret_key>``` with your access key and secret key. If you have credentials saved in a credentials file, you can omit these configuration values.
+This is an example configuration. 
 
-To run logstash type:
+You must replace ```<access_key_id>``` and ```<secret_key>``` with your access key and secret key. If you have credentials saved in a credentials file, you can omit these configuration values.
 
-```
-bin/logstash -f logstash-dynamodb.conf
-```
+You must replace ```DynamoDBTableName``` with your DynamoDb table name 
+
+You must change the  DyanmoDb ```endpoint``` and ```streams_enpoint``` according to http://docs.aws.amazon.com/general/latest/gr/rande.html#ddb_region
+
+You must change the AWS Elasticsearch ```host name``` to the domain ```endpoint``` that you see in AWS Elasticsearch Web console.
+
+This command should run the logstash with this configuration.
 
 Logstash should successfully start and begin indexing the records from your DynamoDB table.
 
