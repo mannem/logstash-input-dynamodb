@@ -115,12 +115,6 @@ To build the gem, type the following command:
 gem build logstash-input-dynamodb.gemspec
 ```
 
-To install the gem, in the logstash-dynamodb-input folder type:
-
-```
-gem install --local logstash-input-dynamodb-1.0.0-java.gem
-```
-
 ### To install the Logstash plugin for DynamoDB
 
 Now that you have built the plugin gem, you can install it.
