@@ -4,6 +4,8 @@ The Logstash plugin for Amazon DynamoDB gives you a nearly real-time view of the
 
 Logstash is a data pipeline service that processes data, parses data, and then outputs it to a selected location in a selected format. Elasticsearch is a distributed, full-text search server. For more information about Logstash and Elasticsearch, go to https://www.elastic.co/products/elasticsearch.
 
+Amazon Elasticsearch Service is a managed service that makes it easy to deploy, operate, and scale Elasticsearch in the AWS Cloud.  https://aws.amazon.com/elasticsearch-service/
+
 ## The following sections walk you through the process to:
 
 1. Create a DynamoDB table and enable a new stream on the table.
