@@ -145,7 +145,7 @@ If the logstash-output-elasticsearch or logstash-output-stdout plugins are not l
 
 **NOTE: First, make sure you have *Enabled Streams* (see above) for your DynamoDB table(s) before running logstash. The streams should also have required view type (like new_and_old_images) that is specified in configuration.  Logstash for DynamoDB requires that each table you are logging from have a streams enabled to work.**
 
-In the local Logstash directory type the following command:
+In the local Logstash directory type a command similar to this:
 
 ```
 bin/logstash -e 'input { 
@@ -163,7 +163,7 @@ output {
 
 **Important**
 
-This is an example configuration. 
+This is an example command for configuring and running the logstash plugin. 
 
 You must replace ```<access_key_id>``` and ```<secret_key>``` with your access key and secret key. If you have credentials saved in a credentials file, you can omit these configuration values.
 
