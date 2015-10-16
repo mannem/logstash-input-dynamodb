@@ -125,6 +125,8 @@ Change directories to your local Logstash directory.
 In the Logstash directory, open the Gemfile file in a text editor and add the following line.
 
 ```
+cd logstash-1.5.4
+vim Gemfile
 gem "logstash-input-dynamodb"
 ```
 
