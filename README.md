@@ -22,7 +22,7 @@ When this process is finished, you can search your data in the AWS Elasticsearch
 
 1. Amazon Web Services (AWS) account with DynamoDB
 2. A running Elasticsearch cluster—To download Elasticsearch, go to https://www.elastic.co/products/elasticsearch. Or Spin up your own AWS Elasticsearch cluster at http://console.aws.amazon.com/es
-3. You may need to install development tools for GCC ```sudo yum groupinstall "Development Tools" ```
+3. You may need to install development tools which incldes some pre-reqs like gcc,git etc. You can skip this option though, ```sudo yum groupinstall "Development Tools" ```
 4. Download all the pre-requisites. 
 
  a. JRuby—To download JRuby, you may install this with RVM : https://rvm.io/rvm/install . 
@@ -104,8 +104,9 @@ gem install bundler
 The Bundler gem checks dependencies for Ruby gems and installs them for you.
 
 To install the dependencies for the Logstash plugin for DynamoDB, type the following command (Inside the logstash directory):
-
+This command may take a while to install. 
 ```
+cd logstash-input-dynamodb/
 bundle install
 ```
 
