@@ -174,7 +174,7 @@ You must replace ```DynamoDBTableName``` with your DynamoDb table name
 
 You must change the  DyanmoDb ```endpoint``` and ```streams_enpoint``` according to http://docs.aws.amazon.com/general/latest/gr/rande.html#ddb_region
 
-You must change the AWS Elasticsearch ```host name``` to the domain ```endpoint``` that you see in AWS Elasticsearch Web console.
+You must change the AWS Elasticsearch ```hostname``` to the domain ```endpoint``` that you see in AWS Elasticsearch Web console.
 
 This command should run the logstash with this configuration.
 
