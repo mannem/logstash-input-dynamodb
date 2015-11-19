@@ -103,7 +103,7 @@ gem install bundler
 
 The Bundler gem checks dependencies for Ruby gems and installs them for you.
 
-To install the dependencies for the Logstash plugin for DynamoDB, type the following command (Inside the logstash directory):
+To install the dependencies for the Logstash plugin for DynamoDB, type the following command (Inside the DynamoDB logstash directory):
 This command may take a while to install. 
 ```
 cd logstash-input-dynamodb/
